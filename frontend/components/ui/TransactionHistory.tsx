@@ -6,8 +6,9 @@ import { Card, CardBody } from "@/components/ui/Primitives";
 import { EmptyState, PageLoading } from "@/components/ui/Feedback";
 import { formatXLM, formatDate, horizonExplorerUrl, truncateHash } from "@/lib/format";
 import type { Transaction } from "@/lib/types";
-import { ExternalLink, ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ExternalLink, ArrowDownRight, ArrowUpRight, Download } from "lucide-react";
 import { useAuth } from "@/lib/auth";
+import { Button } from "@/components/ui/Button";
 
 export function TransactionHistory() {
   const { user } = useAuth();
@@ -17,10 +18,45 @@ export function TransactionHistory() {
 
   const transactions = data?.transactions || [];
 
+  const downloadCSV = () => {
+    if (!transactions.length) return;
+    
+    const headers = ["Date", "Type", "Amount (XLM)", "Status", "Hash", "Memo"];
+    const rows = transactions.map((tx) => {
+      const isSender = typeof tx.sender === "object" ? tx.sender._id === user?._id : tx.sender === user?._id;
+      return [
+        `"${formatDate(tx.createdAt)}"`,
+        isSender ? "Sent" : "Received",
+        tx.amount,
+        tx.status,
+        tx.hash,
+        `"${tx.memo || ""}"`
+      ].join(",");
+    });
+    
+    const csvContent = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `transactions_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <Card className="mt-8">
       <CardBody className="pt-5">
-        <p className="font-display text-xl text-ink mb-4">Payment History</p>
+        <div className="flex items-center justify-between mb-4">
+          <p className="font-display text-xl text-ink">Payment History</p>
+          {transactions.length > 0 && (
+            <Button variant="outline" size="sm" onClick={downloadCSV} className="flex items-center gap-2">
+              <Download size={14} />
+              Export CSV
+            </Button>
+          )}
+        </div>
         {transactions.length === 0 ? (
           <EmptyState title="No transactions yet" description="Your payment history will appear here." />
         ) : (
