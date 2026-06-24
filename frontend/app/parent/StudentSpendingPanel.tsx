@@ -50,9 +50,9 @@ export function StudentSpendingPanel({ student }: { student: StudentSummary }) {
       });
 
       // 3. Sign the XDR with Freighter
-      const signedXDR = await signTransaction(xdr, { networkPassphrase: "Test SDF Network ; September 2015" });
-      if (typeof signedXDR !== "string" && 'error' in signedXDR) {
-          throw new Error(signedXDR.error);
+      const signResult = await signTransaction(xdr, { networkPassphrase: "Test SDF Network ; September 2015" });
+      if (signResult.error) {
+          throw new Error(signResult.error as string);
       }
 
       // 4. Submit the signed XDR to the backend
@@ -60,7 +60,7 @@ export function StudentSpendingPanel({ student }: { student: StudentSummary }) {
         studentId: student._id,
         amount: numericAmount,
         memo,
-        signedXDR: signedXDR as string,
+        signedXDR: signResult.signedTxXdr,
       });
       
       setLastHash(result.stellarHash);
