@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: #faf8f4;
+    color: #1c2b33;
+    font-feature-settings: "kern" 1;
+  }
+
+  /* visible keyboard focus everywhere, no exceptions */
+  :focus-visible {
+    outline: 2px solid #3d6b5c;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: #e8f0ec;
+    color: #1c2b33;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* hairline rule used throughout — the "ledger line" */
+  .ledger-rule {
+    border-top: 1px solid #e2dcce;
+  }
+
+  /* tabular figures for any amount column — numbers must align */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
