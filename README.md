@@ -169,21 +169,16 @@ each key's presence and falls back gracefully if it's missing.
 
 ---
 
-## A note on wallet custody (read this before you present)
+## Fully Non-Custodial Architecture
 
-For demo simplicity, this app generates a Stellar keypair per user at
-signup and stores the **secret key directly in MongoDB** so the backend
-can sign transactions without a wallet popup. This is explicitly called
-out in `backend/src/services/stellarService.js`.
+This application implements a fully non-custodial Web3 architecture using **Freighter Wallet**. 
+Unlike early prototypes that store secret keys in a database, EduRemit-AI guarantees that user funds remain entirely in their control.
 
-**This is appropriate for a testnet demo and inappropriate for real
-funds.** If a judge or reviewer asks about production-readiness for
-handling actual money, the honest answer is: a real version would need a
-non-custodial flow (a browser wallet extension like Freighter signing
-transactions client-side) or, if custodial, proper key management (an
-HSM or KMS, never a plaintext database field). Saying this clearly in
-your demo is a stronger signal of engineering maturity than pretending
-the current approach is production-grade.
+1. **Transaction Building**: The backend Express API constructs unsigned XDR envelopes using the Stellar SDK.
+2. **Client-Side Signing**: The unsigned XDR is returned to the frontend, where the Freighter extension prompts the user to securely sign the transaction.
+3. **Network Submission**: The signed transaction is sent back to the backend which submits it to the Horizon testnet.
+
+This architecture ensures that the server **never** has access to the user's private keys, providing enterprise-grade security for education remittances.
 
 ---
 
