@@ -193,16 +193,19 @@ This architecture ensures that the server **never** has access to the user's pri
 ## Screenshots
 
 ### Parent Experience
-*(Add your parent screenshot here: e.g. `![Parent Dashboard](./images/parent.png)`)*
+![Parent Dashboard](./images/parent_dashboard.png)
+![Parent Transaction History](./images/parents_history.png)
+![Parent Feedback](./images/parent_feedback.png)
 
 ### Student Experience
-*(Add your student screenshot here: e.g. `![Student Dashboard](./images/student.png)`)*
+![Student Dashboard](./images/student_dashboard.png)
+![Student Overview](./images/student_overview.png)
+![AI Budget Advisor](./images/AI_advisor.png)
+![Student Transaction History](./images/student_history.png)
 
 ### University Experience
-*(Add your university screenshot here: e.g. `![University Dashboard](./images/university.png)`)*
-
-### Mobile / Analytics
-*(Add your mobile UI or PostHog/Sentry dashboard screenshots here)*
+![University Dashboard](./images/university_dashboard.png)
+![University Transaction History](./images/university_history.png)
 
 ---
 
