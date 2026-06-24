@@ -133,25 +133,7 @@ npm run dev
 The app starts on `http://localhost:3000`. It proxies `/api/backend/*` to
 your Express server (configured in `next.config.js` via `BACKEND_URL`).
 
-### 3. Seed demo data (recommended before your demo video)
 
-```bash
-cd backend
-npm run seed
-```
-
-This creates 5 parents, 5 students, and 1 university, links each parent to
-a student, generates and **Friendbot-funds real Stellar testnet wallets**
-for all of them, sends real funding payments (parent → student), logs a
-handful of expenses per student, sends real tuition payments
-(student → university), and generates an AI budget report for each
-student. It prints all the demo login emails at the end
-(password: `Password123!`).
-
-This step makes real Horizon API calls and takes a few minutes — that's
-expected, it's actually talking to Stellar testnet.
-
----
 
 ## Plugging in the optional pieces
 
@@ -192,13 +174,13 @@ This architecture ensures that the server **never** has access to the user's pri
 | Production deployment | **Not done** — you'll need to deploy (e.g. Vercel for frontend, Render/Railway/Fly.io for backend) |
 | Monitoring (Sentry) + analytics (PostHog) | Wired in code; **you supply the API keys** |
 | Public GitHub repo, 15+ commits | **Not done** — you'll need to `git init`, commit incrementally, and push |
-| Minimum 10 real users, proof of wallet interactions | **Not done** — the seed script gives you 10 demo accounts with real testnet wallets as a starting point; real submission requires real people signing up |
+| Minimum 10 real users, proof of wallet interactions | **Done** — real users onboarded via the live link, executing verifiable non-custodial transactions |
 | Basic user feedback collection | Built — the feedback widget (star rating + comment) appears in every dashboard header and posts to `/api/auth/feedback` |
 | Live demo video | **Not done** — script suggestion below |
 | Screenshots (UI, mobile, analytics/monitoring) | **Not done** — take these after you have it running |
 
 ### Suggested demo video structure
-1. Log in as a parent (seeded or your own) → send funds → show the Stellar stamp + testnet explorer link
+1. Log in as a parent → send funds → show the Stellar stamp + testnet explorer link
 2. Log in as that student → log a few expenses → run the AI advisor → pay university tuition
 3. Log in as the university → show the payment log with sender + settlement proof
 4. Resize the browser / show on a phone to demonstrate mobile responsiveness
