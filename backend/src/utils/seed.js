@@ -25,8 +25,8 @@ import AIReport from "../models/AIReport.js";
 import { createFundedWallet, sendPayment } from "../services/stellarService.js";
 import { analyzeSpending } from "../services/aiAdvisorService.js";
 
-const PARENT_NAMES = ["Amara Okafor", "Liang Wei", "Priya Nair", "Carlos Mendes", "Fatima Haidari"];
-const STUDENT_NAMES = ["Tunde Okafor", "Mei Wei", "Ananya Nair", "Diego Mendes", "Zahra Haidari"];
+const PARENT_NAMES = ["Rajesh Kumar", "Anjali Sharma", "Ramesh Patel", "Vikram Singh", "Priya Nair"];
+const STUDENT_NAMES = ["Aarav Kumar", "Diya Sharma", "Rahul Patel", "Rohan Singh", "Ananya Nair"];
 const CATEGORIES = ["food", "books", "rent", "transport", "fees"];
 
 function randomAmount(min, max) {
