@@ -13,6 +13,7 @@ import type { StudentSummary, WalletInfo } from "@/lib/types";
 import { UserPlus } from "lucide-react";
 import { LinkStudentForm } from "./LinkStudentForm";
 import { StudentSpendingPanel } from "./StudentSpendingPanel";
+import { TransactionHistory } from "@/components/ui/TransactionHistory";
 
 export default function ParentDashboard() {
   const { user, loading: authLoading } = useRequireRole("parent");
@@ -109,6 +110,10 @@ export default function ParentDashboard() {
             ))}
           </div>
         )}
+      </section>
+
+      <section>
+        <TransactionHistory />
       </section>
     </DashboardShell>
   );

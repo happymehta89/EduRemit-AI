@@ -14,6 +14,7 @@ import { ExpenseHistory } from "./ExpenseHistory";
 import { SpendingChart } from "./SpendingChart";
 import { PayUniversityForm } from "./PayUniversityForm";
 import { BudgetAdvisor } from "./BudgetAdvisor";
+import { TransactionHistory } from "@/components/ui/TransactionHistory";
 
 export default function StudentDashboard() {
   const { user, loading: authLoading } = useRequireRole("student");
@@ -83,9 +84,12 @@ export default function StudentDashboard() {
       </div>
 
       {tab === "overview" && (
-        <div className="grid sm:grid-cols-2 gap-6">
-          <SpendingChart expenses={expenses} />
-          <ExpenseHistory expenses={expenses.slice(0, 6)} onDeleted={refreshAll} compact />
+        <div className="flex flex-col gap-6">
+          <div className="grid sm:grid-cols-2 gap-6">
+            <SpendingChart expenses={expenses} />
+            <ExpenseHistory expenses={expenses.slice(0, 6)} onDeleted={refreshAll} compact />
+          </div>
+          <TransactionHistory />
         </div>
       )}
 
