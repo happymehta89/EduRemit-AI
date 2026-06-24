@@ -51,7 +51,7 @@ export function TransactionHistory() {
         <div className="flex items-center justify-between mb-4">
           <p className="font-display text-xl text-ink">Payment History</p>
           {transactions.length > 0 && (
-            <Button variant="outline" size="sm" onClick={downloadCSV} className="flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={downloadCSV} className="flex items-center gap-2">
               <Download size={14} />
               Export CSV
             </Button>
