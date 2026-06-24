@@ -48,10 +48,15 @@ export function ConnectWallet() {
 
   if (connectedKey) {
     return (
-      <div className="flex items-center gap-2 text-sm text-sand bg-ledger-light px-3 py-1.5 rounded-md border border-ledger">
+      <button 
+        onClick={handleConnect}
+        disabled={loading}
+        className="flex items-center gap-2 text-sm text-sand bg-ledger-light hover:bg-ledger-light/80 px-3 py-1.5 rounded-md border border-ledger transition-colors"
+        title="Change Wallet"
+      >
         <span className="w-2 h-2 rounded-full bg-green-500"></span>
-        {connectedKey.slice(0, 6)}...{connectedKey.slice(-4)}
-      </div>
+        {loading ? "Connecting..." : `${connectedKey.slice(0, 6)}...${connectedKey.slice(-4)}`}
+      </button>
     );
   }
 

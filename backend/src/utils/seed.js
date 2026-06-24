@@ -179,6 +179,13 @@ async function run() {
     console.log(`  ${student.name}: report generated (risk: ${analysis.riskLevel})`);
   }
 
+  console.log("\nClearing parent wallets to force Freighter connection...");
+  for (const parent of parents) {
+    parent.walletPublicKey = null;
+    parent.walletSecretKeyEncrypted = null;
+    await parent.save();
+  }
+
   console.log("\n✅ Seed complete.");
   console.log("\nDemo login credentials (all use password: Password123!):");
   parents.forEach((p, i) => console.log(`  Parent:     ${p.email}`));
