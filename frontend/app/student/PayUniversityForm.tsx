@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useFetch } from "@/hooks/useFetch";
 import { api, ApiClientError } from "@/lib/api";
+import { signTransaction, isAllowed, requestAccess } from "@stellar/freighter-api";
 import { Card, CardBody, Field, Input, Select } from "@/components/ui/Primitives";
 import { Button } from "@/components/ui/Button";
 import { ErrorBanner, PageLoading } from "@/components/ui/Feedback";
@@ -38,18 +39,41 @@ export function PayUniversityForm({ onPaid }: { onPaid: () => void }) {
     }
     setSubmitting(true);
     try {
+      // 1. Ensure Freighter is connected
+      if (!(await isAllowed())) {
+        await requestAccess();
+      }
+
+      const memoText = type === "tuition" ? "Tuition payment" : "Rent payment";
+
+      // 2. Get the unsigned XDR from the backend
+      const { xdr } = await api.post<{ xdr: string }>("/transactions/build-tuition", {
+        universityId,
+        amount: numericAmount,
+        memo: memoText,
+      });
+
+      // 3. Sign the XDR with Freighter
+      const signedXDR = await signTransaction(xdr, { network: "TESTNET" });
+      if (typeof signedXDR !== "string" && 'error' in signedXDR) {
+          throw new Error(signedXDR.error);
+      }
+
+      // 4. Submit the signed XDR to the backend
       const result = await api.post<{ stellarHash: string }>("/transactions/pay-university", {
         universityId,
         amount: numericAmount,
         type,
-        memo: type === "tuition" ? "Tuition payment" : "Rent payment",
+        memo: memoText,
+        signedXDR: signedXDR as string,
       });
+      
       setLastHash(result.stellarHash);
       setAmount("");
       track("payment_completed", { type, amount: numericAmount, universityId });
       onPaid();
     } catch (err) {
-      setError(err instanceof ApiClientError ? err.message : "The payment failed. Please try again.");
+      setError(err instanceof ApiClientError ? err.message : (err as Error).message || "The payment failed. Please try again.");
     } finally {
       setSubmitting(false);
     }

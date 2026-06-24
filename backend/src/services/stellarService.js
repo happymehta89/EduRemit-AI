@@ -100,6 +100,46 @@ export async function sendPayment({ senderSecretKey, receiverPublicKey, amount, 
 }
 
 /**
+ * Builds an unsigned native XLM payment transaction from sender to receiver.
+ * Returns the transaction XDR string to be signed by the frontend.
+ */
+export async function buildPaymentXDR({ senderPublicKey, receiverPublicKey, amount, memo = "" }) {
+  const senderAccount = await server.loadAccount(senderPublicKey);
+
+  const txBuilder = new StellarSdk.TransactionBuilder(senderAccount, {
+    fee: StellarSdk.BASE_FEE,
+    networkPassphrase: NETWORK_PASSPHRASE,
+  }).addOperation(
+    StellarSdk.Operation.payment({
+      destination: receiverPublicKey,
+      asset: StellarSdk.Asset.native(),
+      amount: amount.toString(),
+    })
+  );
+
+  if (memo) {
+    txBuilder.addMemo(StellarSdk.Memo.text(memo.slice(0, 28)));
+  }
+
+  const transaction = txBuilder.setTimeout(300).build(); // 5 minutes to sign
+  return transaction.toXDR();
+}
+
+/**
+ * Submits a signed transaction XDR to the Horizon network.
+ */
+export async function submitSignedXDR(signedXDR) {
+  const transaction = StellarSdk.TransactionBuilder.fromXDR(signedXDR, NETWORK_PASSPHRASE);
+  const result = await server.submitTransaction(transaction);
+  
+  return {
+    hash: result.hash,
+    ledger: result.ledger,
+    successful: result.successful !== false,
+  };
+}
+
+/**
  * Fetches recent payment operations for a given public key, for the
  * "transaction history" view. Returns Horizon's records, lightly shaped.
  */

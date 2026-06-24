@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useFetch } from "@/hooks/useFetch";
 import { api, ApiClientError } from "@/lib/api";
+import { signTransaction, isAllowed, requestAccess } from "@stellar/freighter-api";
 import { Field, Input } from "@/components/ui/Primitives";
 import { Button } from "@/components/ui/Button";
 import { ErrorBanner, Spinner } from "@/components/ui/Feedback";
@@ -36,17 +37,38 @@ export function StudentSpendingPanel({ student }: { student: StudentSummary }) {
     }
     setSubmitting(true);
     try {
-      const result = await api.post<{ stellarHash: string }>("/transactions/fund", {
+      // 1. Ensure Freighter is connected
+      if (!(await isAllowed())) {
+        await requestAccess();
+      }
+
+      // 2. Get the unsigned XDR from the backend
+      const { xdr } = await api.post<{ xdr: string }>("/transactions/build-fund", {
         studentId: student._id,
         amount: numericAmount,
         memo,
       });
+
+      // 3. Sign the XDR with Freighter
+      const signedXDR = await signTransaction(xdr, { network: "TESTNET" });
+      if (typeof signedXDR !== "string" && 'error' in signedXDR) {
+          throw new Error(signedXDR.error);
+      }
+
+      // 4. Submit the signed XDR to the backend
+      const result = await api.post<{ stellarHash: string }>("/transactions/fund", {
+        studentId: student._id,
+        amount: numericAmount,
+        memo,
+        signedXDR: signedXDR as string,
+      });
+      
       setLastHash(result.stellarHash);
       setAmount("");
       track("funds_sent", { amount: numericAmount, studentId: student._id });
       reload();
     } catch (err) {
-      setError(err instanceof ApiClientError ? err.message : "The transfer failed. Please try again.");
+      setError(err instanceof ApiClientError ? err.message : (err as Error).message || "The transfer failed. Please try again.");
     } finally {
       setSubmitting(false);
     }

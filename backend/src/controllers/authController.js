@@ -24,21 +24,12 @@ export async function signup(req, res, next) {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    // Auto-generate and fund a Stellar testnet wallet for this user
-    let wallet;
-    try {
-      wallet = await createFundedWallet();
-    } catch (err) {
-      return res.status(503).json({ error: err.message });
-    }
-
     const user = new User({
       name,
       email: email.toLowerCase(),
       passwordHash,
       role,
-      walletPublicKey: wallet.publicKey,
-      walletSecretKeyEncrypted: wallet.secretKey, // demo-only storage, see stellarService.js note
+      walletPublicKey: null, // User connects wallet later
       universityName: role === "university" ? universityName : undefined,
     });
 

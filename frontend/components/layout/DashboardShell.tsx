@@ -5,6 +5,7 @@ import { truncateWallet } from "@/lib/format";
 import { Wallet, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { FeedbackWidget } from "./FeedbackWidget";
+import { ConnectWallet } from "@/components/ui/ConnectWallet";
 
 const ROLE_DOCUMENT_LABEL: Record<string, string> = {
   parent: "Remittance Ledger",
@@ -36,12 +37,7 @@ export function DashboardShell({
           <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
             {rightSlot}
             <FeedbackWidget />
-            {user?.walletPublicKey && (
-              <div className="hidden md:flex items-center gap-1.5 text-xs font-mono text-sand bg-paper-dim px-2.5 py-1.5 rounded">
-                <Wallet size={13} />
-                {truncateWallet(user.walletPublicKey)}
-              </div>
-            )}
+            <ConnectWallet />
             <button
               onClick={logout}
               className="flex items-center gap-1.5 text-sm text-ink-soft hover:text-ink transition-colors"

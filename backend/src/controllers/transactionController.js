@@ -2,47 +2,61 @@ import mongoose from "mongoose";
 import User from "../models/User.js";
 import Transaction from "../models/Transaction.js";
 import Expense from "../models/Expense.js";
-import { sendPayment } from "../services/stellarService.js";
+import { buildPaymentXDR, submitSignedXDR } from "../services/stellarService.js";
 
 /**
- * Parent sends funds to a linked student.
+ * Build unsigned XDR for parent funding student.
+ */
+export async function buildFundTransaction(req, res, next) {
+  try {
+    if (req.user.role !== "parent") return res.status(403).json({ error: "Only parents can build fund tx." });
+    
+    const { studentId, amount, memo } = req.body;
+    const numericAmount = Number(amount);
+    if (!studentId || !numericAmount || numericAmount <= 0) return res.status(400).json({ error: "Invalid data." });
+    
+    const student = await User.findOne({ _id: studentId, role: "student" });
+    if (!student) return res.status(404).json({ error: "Student not found." });
+    
+    if (!req.user.walletPublicKey) return res.status(400).json({ error: "Connect your Freighter wallet first." });
+    
+    const xdr = await buildPaymentXDR({
+      senderPublicKey: req.user.walletPublicKey,
+      receiverPublicKey: student.walletPublicKey,
+      amount: numericAmount,
+      memo: memo || "Education funding",
+    });
+    
+    res.json({ xdr });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Parent submits signed funding XDR.
  */
 export async function sendFunds(req, res, next) {
   try {
-    if (req.user.role !== "parent") {
-      return res.status(403).json({ error: "Only parent accounts can send funds." });
-    }
+    if (req.user.role !== "parent") return res.status(403).json({ error: "Only parent accounts can send funds." });
 
-    const { studentId, amount, memo } = req.body;
+    const { studentId, amount, memo, signedXDR } = req.body;
     const numericAmount = Number(amount);
 
-    if (!studentId || !numericAmount || numericAmount <= 0) {
-      return res.status(400).json({ error: "studentId and a positive amount are required." });
+    if (!studentId || !numericAmount || !signedXDR) {
+      return res.status(400).json({ error: "Missing required fields." });
     }
 
     const student = await User.findOne({ _id: studentId, role: "student" });
-    if (!student) {
-      return res.status(404).json({ error: "Student not found." });
-    }
-    if (!req.user.linkedStudents.map(String).includes(String(student._id))) {
-      return res.status(403).json({ error: "You can only send funds to a linked student." });
-    }
-    if (!req.user.walletSecretKeyEncrypted) {
-      return res.status(400).json({ error: "Your wallet isn't set up yet." });
-    }
+    if (!student) return res.status(404).json({ error: "Student not found." });
 
     let result;
     try {
-      result = await sendPayment({
-        senderSecretKey: req.user.walletSecretKeyEncrypted,
-        receiverPublicKey: student.walletPublicKey,
-        amount: numericAmount,
-        memo: memo || "Education funding",
-      });
+      result = await submitSignedXDR(signedXDR);
     } catch (err) {
       const detail = err?.response?.data?.extras?.result_codes || err.message;
       return res.status(502).json({
-        error: "The Stellar payment failed. This usually means insufficient testnet balance.",
+        error: "The Stellar payment failed.",
         detail,
       });
     }
@@ -66,38 +80,58 @@ export async function sendFunds(req, res, next) {
 }
 
 /**
- * Student pays a university (tuition/rent/other) from their wallet.
+ * Build unsigned XDR for tuition payment.
+ */
+export async function buildTuitionTransaction(req, res, next) {
+  try {
+    if (req.user.role !== "student") return res.status(403).json({ error: "Only students can build tuition tx." });
+    
+    const { universityId, amount, memo } = req.body;
+    const numericAmount = Number(amount);
+    if (!universityId || !numericAmount || numericAmount <= 0) return res.status(400).json({ error: "Invalid data." });
+    
+    const university = await User.findOne({ _id: universityId, role: "university" });
+    if (!university) return res.status(404).json({ error: "University not found." });
+    
+    if (!req.user.walletPublicKey) return res.status(400).json({ error: "Connect your Freighter wallet first." });
+    
+    const xdr = await buildPaymentXDR({
+      senderPublicKey: req.user.walletPublicKey,
+      receiverPublicKey: university.walletPublicKey,
+      amount: numericAmount,
+      memo: memo || "Tuition payment",
+    });
+    
+    res.json({ xdr });
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * Student submits signed tuition XDR.
  */
 export async function payUniversity(req, res, next) {
   try {
-    if (req.user.role !== "student") {
-      return res.status(403).json({ error: "Only student accounts can make payments." });
-    }
+    if (req.user.role !== "student") return res.status(403).json({ error: "Only student accounts can make payments." });
 
-    const { universityId, amount, type, memo } = req.body;
+    const { universityId, amount, type, memo, signedXDR } = req.body;
     const numericAmount = Number(amount);
 
-    if (!universityId || !numericAmount || numericAmount <= 0) {
-      return res.status(400).json({ error: "universityId and a positive amount are required." });
+    if (!universityId || !numericAmount || !signedXDR) {
+      return res.status(400).json({ error: "Missing required fields." });
     }
 
     const university = await User.findOne({ _id: universityId, role: "university" });
-    if (!university) {
-      return res.status(404).json({ error: "University not found." });
-    }
+    if (!university) return res.status(404).json({ error: "University not found." });
 
     let result;
     try {
-      result = await sendPayment({
-        senderSecretKey: req.user.walletSecretKeyEncrypted,
-        receiverPublicKey: university.walletPublicKey,
-        amount: numericAmount,
-        memo: memo || "Tuition payment",
-      });
+      result = await submitSignedXDR(signedXDR);
     } catch (err) {
       const detail = err?.response?.data?.extras?.result_codes || err.message;
       return res.status(502).json({
-        error: "The Stellar payment failed. This usually means insufficient testnet balance.",
+        error: "The Stellar payment failed.",
         detail,
       });
     }
