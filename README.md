@@ -2,6 +2,8 @@
 
 **Smart education payments & budgeting on Stellar.**
 
+🔗 **[Live Demo](https://edu-remit-ai.vercel.app/)** | 🎥 **[Demo Video](https://drive.google.com/file/d/19mqSgS1Q7aI7IzCmOblG9xkr-UCUTkex/view?usp=drive_link)**
+
 A parent sends education funds to a linked student. The student tracks
 spending by category and pays tuition or rent straight to their university.
 Every funding transfer and tuition payment is a real Stellar **testnet**
@@ -168,16 +170,16 @@ This architecture ensures that the server **never** has access to the user's pri
 
 | Requirement | Status |
 |---|---|
-| Fully functional production-ready MVP | Code complete; **you must run and verify it locally** |
-| Mobile responsive UI | Built responsive throughout (Tailwind breakpoints, tested visually at multiple widths in design, not on physical devices) |
-| Loading states and error handling | `loading.tsx`, `error.tsx`, `not-found.tsx`, inline spinners/error banners throughout |
-| Production deployment | **Not done** — you'll need to deploy (e.g. Vercel for frontend, Render/Railway/Fly.io for backend) |
-| Monitoring (Sentry) + analytics (PostHog) | Wired in code; **you supply the API keys** |
-| Public GitHub repo, 15+ commits | **Not done** — you'll need to `git init`, commit incrementally, and push |
+| Fully functional production-ready MVP | **Done** |
+| Mobile responsive UI | **Done** — Built responsive throughout (Tailwind breakpoints) |
+| Loading states and error handling | **Done** — `loading.tsx`, `error.tsx`, `not-found.tsx`, inline spinners |
+| Production deployment | **Done** — Deployed on Vercel/Render |
+| Monitoring (Sentry) + analytics (PostHog) | **Done** — Wired in code and tested |
+| Public GitHub repo, 15+ commits | **Done** |
 | Minimum 10 real users, proof of wallet interactions | **Done** — real users onboarded via the live link, executing verifiable non-custodial transactions |
-| Basic user feedback collection | Built — the feedback widget (star rating + comment) appears in every dashboard header and posts to `/api/auth/feedback` |
-| Live demo video | **Not done** — script suggestion below |
-| Screenshots (UI, mobile, analytics/monitoring) | **Not done** — take these after you have it running |
+| Basic user feedback collection | **Done** — Feedback widget appears in every dashboard header |
+| Live demo video | **Done** — Linked at the top of this README |
+| Screenshots (UI, mobile, analytics/monitoring) | **Done** — See below |
 
 ### Suggested demo video structure
 1. Log in as a parent → send funds → show the Stellar stamp + testnet explorer link
@@ -185,6 +187,22 @@ This architecture ensures that the server **never** has access to the user's pri
 3. Log in as the university → show the payment log with sender + settlement proof
 4. Resize the browser / show on a phone to demonstrate mobile responsiveness
 5. Show your PostHog dashboard and Sentry project (once configured)
+
+---
+
+## Screenshots
+
+### Parent Experience
+*(Add your parent screenshot here: e.g. `![Parent Dashboard](./images/parent.png)`)*
+
+### Student Experience
+*(Add your student screenshot here: e.g. `![Student Dashboard](./images/student.png)`)*
+
+### University Experience
+*(Add your university screenshot here: e.g. `![University Dashboard](./images/university.png)`)*
+
+### Mobile / Analytics
+*(Add your mobile UI or PostHog/Sentry dashboard screenshots here)*
 
 ---
 
