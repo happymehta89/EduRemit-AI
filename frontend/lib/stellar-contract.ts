@@ -82,11 +82,11 @@ export async function linkStudentInContract(parentPublicKey: string, studentPubl
   const sendResult = await server.sendTransaction(submittedTx);
   
   if (sendResult.status === "ERROR") {
-    throw new Error(`Transaction failed: ${JSON.stringify(sendResult.errorResultXdr)}`);
+    throw new Error(`Transaction failed: ${JSON.stringify(sendResult.errorResult)}`);
   }
 
   let txResult = await server.getTransaction(sendResult.hash);
-  while (txResult.status === rpc.Api.GetTransactionStatus.NOT_FOUND || txResult.status === rpc.Api.GetTransactionStatus.PENDING) {
+  while (txResult.status === rpc.Api.GetTransactionStatus.NOT_FOUND) {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     txResult = await server.getTransaction(sendResult.hash);
   }
@@ -150,11 +150,11 @@ export async function depositToContract(parentPublicKey: string, studentPublicKe
   const sendResult = await server.sendTransaction(submittedTx);
   
   if (sendResult.status === "ERROR") {
-    throw new Error(`Transaction failed: ${JSON.stringify(sendResult.errorResultXdr)}`);
+    throw new Error(`Transaction failed: ${JSON.stringify(sendResult.errorResult)}`);
   }
 
   let txResult = await server.getTransaction(sendResult.hash);
-  while (txResult.status === rpc.Api.GetTransactionStatus.NOT_FOUND || txResult.status === rpc.Api.GetTransactionStatus.PENDING) {
+  while (txResult.status === rpc.Api.GetTransactionStatus.NOT_FOUND) {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     txResult = await server.getTransaction(sendResult.hash);
   }
@@ -204,11 +204,11 @@ export async function payUniversityFromContract(studentPublicKey: string, univer
   const sendResult = await server.sendTransaction(submittedTx);
   
   if (sendResult.status === "ERROR") {
-    throw new Error(`Transaction failed: ${JSON.stringify(sendResult.errorResultXdr)}`);
+    throw new Error(`Transaction failed: ${JSON.stringify(sendResult.errorResult)}`);
   }
 
   let txResult = await server.getTransaction(sendResult.hash);
-  while (txResult.status === rpc.Api.GetTransactionStatus.NOT_FOUND || txResult.status === rpc.Api.GetTransactionStatus.PENDING) {
+  while (txResult.status === rpc.Api.GetTransactionStatus.NOT_FOUND) {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     txResult = await server.getTransaction(sendResult.hash);
   }
