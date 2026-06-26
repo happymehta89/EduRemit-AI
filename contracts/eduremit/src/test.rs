@@ -1,6 +1,6 @@
 #![cfg(test)]
 use super::*;
-use soroban_sdk::{testutils::Address as _, Env, Address};
+use soroban_sdk::{testutils::Address as _, Address, Env};
 
 #[test]
 fn test_flow() {
@@ -10,7 +10,7 @@ fn test_flow() {
     let parent = Address::generate(&env);
     let student = Address::generate(&env);
     let university = Address::generate(&env);
-    
+
     // Deploy a dummy token contract for testing
     let token_admin = Address::generate(&env);
     let token_contract_id = env.register_stellar_asset_contract_v2(token_admin.clone());
