@@ -3,7 +3,8 @@
 import { useState, FormEvent } from "react";
 import { useFetch } from "@/hooks/useFetch";
 import { api, ApiClientError } from "@/lib/api";
-import { signTransaction, isAllowed, requestAccess } from "@stellar/freighter-api";
+import { signTransaction, isAllowed, requestAccess, getAddress } from "@stellar/freighter-api";
+import { depositToContract } from "@/lib/stellar-contract";
 import { Field, Input } from "@/components/ui/Primitives";
 import { Button } from "@/components/ui/Button";
 import { ErrorBanner, Spinner } from "@/components/ui/Feedback";
@@ -42,25 +43,27 @@ export function StudentSpendingPanel({ student }: { student: StudentSummary }) {
         await requestAccess();
       }
 
-      // 2. Get the unsigned XDR from the backend
-      const { xdr } = await api.post<{ xdr: string }>("/transactions/build-fund", {
-        studentId: student._id,
-        amount: numericAmount,
-        memo,
-      });
-
-      // 3. Sign the XDR with Freighter
-      const signResult = await signTransaction(xdr, { networkPassphrase: "Test SDF Network ; September 2015" });
-      if (signResult.error) {
-          throw new Error(signResult.error as string);
+      // 2. Retrieve Parent's wallet address
+      const parentAddressObj = await getAddress();
+      const parentAddress = typeof parentAddressObj === "string" ? parentAddressObj : parentAddressObj.address;
+      if (!parentAddress) {
+        throw new Error("Could not retrieve parent wallet address. Make sure Freighter is unlocked.");
       }
 
-      // 4. Submit the signed XDR to the backend
+      // 3. Retrieve Student's wallet address
+      if (!student.walletPublicKey) {
+        throw new Error("The student has not linked their Freighter wallet yet.");
+      }
+
+      // 4. Call Soroban deposit method on the contract
+      const depositResult = await depositToContract(parentAddress, student.walletPublicKey, numericAmount);
+
+      // 5. Submit transaction hash to the backend to log in the database
       const result = await api.post<{ stellarHash: string }>("/transactions/fund", {
         studentId: student._id,
         amount: numericAmount,
         memo,
-        signedXDR: signResult.signedTxXdr,
+        transactionHash: depositResult.hash,
       });
       
       setLastHash(result.stellarHash);

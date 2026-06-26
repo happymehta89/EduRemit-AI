@@ -40,25 +40,31 @@ export async function sendFunds(req, res, next) {
   try {
     if (req.user.role !== "parent") return res.status(403).json({ error: "Only parent accounts can send funds." });
 
-    const { studentId, amount, memo, signedXDR } = req.body;
+    const { studentId, amount, memo, signedXDR, transactionHash } = req.body;
     const numericAmount = Number(amount);
 
-    if (!studentId || !numericAmount || !signedXDR) {
+    if (!studentId || !numericAmount || (!signedXDR && !transactionHash)) {
       return res.status(400).json({ error: "Missing required fields." });
     }
 
     const student = await User.findOne({ _id: studentId, role: "student" });
     if (!student) return res.status(404).json({ error: "Student not found." });
 
-    let result;
-    try {
-      result = await submitSignedXDR(signedXDR);
-    } catch (err) {
-      const detail = err?.response?.data?.extras?.result_codes || err.message;
-      return res.status(502).json({
-        error: "The Stellar payment failed.",
-        detail,
-      });
+    let hash = transactionHash;
+    let successful = true;
+
+    if (signedXDR) {
+      try {
+        const result = await submitSignedXDR(signedXDR);
+        hash = result.hash;
+        successful = result.successful !== false;
+      } catch (err) {
+        const detail = err?.response?.data?.extras?.result_codes || err.message;
+        return res.status(502).json({
+          error: "The Stellar payment failed.",
+          detail,
+        });
+      }
     }
 
     const tx = await Transaction.create({
@@ -67,13 +73,13 @@ export async function sendFunds(req, res, next) {
       senderWallet: req.user.walletPublicKey,
       receiverWallet: student.walletPublicKey,
       amount: numericAmount,
-      hash: result.hash,
+      hash: hash,
       type: "funding",
       memo: memo || "",
-      status: result.successful ? "success" : "failed",
+      status: successful ? "success" : "failed",
     });
 
-    res.status(201).json({ transaction: tx, stellarHash: result.hash });
+    res.status(201).json({ transaction: tx, stellarHash: hash });
   } catch (err) {
     next(err);
   }
@@ -115,25 +121,31 @@ export async function payUniversity(req, res, next) {
   try {
     if (req.user.role !== "student") return res.status(403).json({ error: "Only student accounts can make payments." });
 
-    const { universityId, amount, type, memo, signedXDR } = req.body;
+    const { universityId, amount, type, memo, signedXDR, transactionHash } = req.body;
     const numericAmount = Number(amount);
 
-    if (!universityId || !numericAmount || !signedXDR) {
+    if (!universityId || !numericAmount || (!signedXDR && !transactionHash)) {
       return res.status(400).json({ error: "Missing required fields." });
     }
 
     const university = await User.findOne({ _id: universityId, role: "university" });
     if (!university) return res.status(404).json({ error: "University not found." });
 
-    let result;
-    try {
-      result = await submitSignedXDR(signedXDR);
-    } catch (err) {
-      const detail = err?.response?.data?.extras?.result_codes || err.message;
-      return res.status(502).json({
-        error: "The Stellar payment failed.",
-        detail,
-      });
+    let hash = transactionHash;
+    let successful = true;
+
+    if (signedXDR) {
+      try {
+        const result = await submitSignedXDR(signedXDR);
+        hash = result.hash;
+        successful = result.successful !== false;
+      } catch (err) {
+        const detail = err?.response?.data?.extras?.result_codes || err.message;
+        return res.status(502).json({
+          error: "The Stellar payment failed.",
+          detail,
+        });
+      }
     }
 
     const tx = await Transaction.create({
@@ -142,13 +154,13 @@ export async function payUniversity(req, res, next) {
       senderWallet: req.user.walletPublicKey,
       receiverWallet: university.walletPublicKey,
       amount: numericAmount,
-      hash: result.hash,
+      hash: hash,
       type: type === "rent" ? "rent" : "tuition",
       memo: memo || "",
-      status: result.successful ? "success" : "failed",
+      status: successful ? "success" : "failed",
     });
 
-    res.status(201).json({ transaction: tx, stellarHash: result.hash });
+    res.status(201).json({ transaction: tx, stellarHash: hash });
   } catch (err) {
     next(err);
   }

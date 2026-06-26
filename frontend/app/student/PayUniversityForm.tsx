@@ -3,7 +3,8 @@
 import { useState, FormEvent } from "react";
 import { useFetch } from "@/hooks/useFetch";
 import { api, ApiClientError } from "@/lib/api";
-import { signTransaction, isAllowed, requestAccess } from "@stellar/freighter-api";
+import { signTransaction, isAllowed, requestAccess, getAddress } from "@stellar/freighter-api";
+import { payUniversityFromContract } from "@/lib/stellar-contract";
 import { Card, CardBody, Field, Input, Select } from "@/components/ui/Primitives";
 import { Button } from "@/components/ui/Button";
 import { ErrorBanner, PageLoading } from "@/components/ui/Feedback";
@@ -46,26 +47,28 @@ export function PayUniversityForm({ onPaid }: { onPaid: () => void }) {
 
       const memoText = type === "tuition" ? "Tuition payment" : "Rent payment";
 
-      // 2. Get the unsigned XDR from the backend
-      const { xdr } = await api.post<{ xdr: string }>("/transactions/build-tuition", {
-        universityId,
-        amount: numericAmount,
-        memo: memoText,
-      });
-
-      // 3. Sign the XDR with Freighter
-      const signResult = await signTransaction(xdr, { networkPassphrase: "Test SDF Network ; September 2015" });
-      if (signResult.error) {
-          throw new Error(signResult.error as string);
+      const selectedUni = universities.find(u => u._id === universityId);
+      if (!selectedUni || !selectedUni.walletPublicKey) {
+        throw new Error("The selected university does not have a linked Stellar wallet.");
       }
 
-      // 4. Submit the signed XDR to the backend
+      // 2. Retrieve Student's wallet address
+      const studentAddressObj = await getAddress();
+      const studentAddress = typeof studentAddressObj === "string" ? studentAddressObj : studentAddressObj.address;
+      if (!studentAddress) {
+        throw new Error("Could not retrieve student wallet address. Make sure Freighter is unlocked.");
+      }
+
+      // 3. Call Soroban pay_university method on the contract
+      const payResult = await payUniversityFromContract(studentAddress, selectedUni.walletPublicKey, numericAmount);
+
+      // 4. Submit transaction hash to the backend to log in the database
       const result = await api.post<{ stellarHash: string }>("/transactions/pay-university", {
         universityId,
         amount: numericAmount,
         type,
         memo: memoText,
-        signedXDR: signResult.signedTxXdr,
+        transactionHash: payResult.hash,
       });
       
       setLastHash(result.stellarHash);
