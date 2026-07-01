@@ -25,7 +25,7 @@ EduRemit AI is a decentralized, transparent, and low-cost education remittance a
 
 ---
 
-## 📈 Level 5 User Feedback & Iteration Roadmap
+##  User Feedback & Iteration Roadmap
 
 To simulate early-stage startup growth, we actively collected feedback from **50+ testnet users** via a structured [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdRHaovGvUAy5ec9vy09iUpqh9XQxtCVHHRdYchzmhOFec91g/viewform). 
 
