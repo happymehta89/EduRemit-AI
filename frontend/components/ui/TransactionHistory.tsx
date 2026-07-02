@@ -14,7 +14,13 @@ export function TransactionHistory() {
   const { user } = useAuth();
   const { data, loading } = useFetch(() => api.get<{ transactions: Transaction[] }>("/transactions"), []);
 
-  if (loading) return <PageLoading />;
+  if (loading) return (
+    <Card className="mt-8 animate-pulse">
+      <CardBody className="pt-5 flex items-center justify-center py-10">
+         <span className="text-sand text-sm">Loading transactions...</span>
+      </CardBody>
+    </Card>
+  );
 
   const transactions = data?.transactions || [];
 
