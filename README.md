@@ -32,8 +32,23 @@ To simulate early-stage startup growth, we actively collected feedback from **50
 🔗 **[View Exported Google Form Responses (Google Sheets)](https://docs.google.com/spreadsheets/d/1kjV_u7TEhQfy4kiZN8_eRANmh6UQz_RVwQWyStz8IOo/edit?usp=sharing)**
 
 
+### Users Onboarded
+| User ID | Name | Email | Wallet Address | Feedback Summary |
+|---------|------|-------|----------------|------------------|
+| U001 | Rahul Sharma | rahulsharma91@gmail.com | `GBKIAHACV6WWBFAXXL5BLLMIZQ4CZWQJOEONN777UPABUZZRPUMF32GF` | "The UI for the remittance page is slightly confusing. Could use better labels." |
+| U002 | Priya Patel | priyapatel45@gmail.com | `GBWTAT7JZSXTMIKQMHKLDALRA6ZBEFK6T7FPRDICPQBNWCZA6YT37FPB` | "Transaction history takes too long to load sometimes." |
+| U003 | Amit Kumar | amitkumar72@gmail.com | `GDXR33OAC323MB45SYYCTK2IUBOJ2POVKUTLF7Q2K7GQRQNC3EAAJULA` | "I would like to see the exact conversion rate before confirming the transfer." |
+| U004 | Sneha Gupta | snehagupta18@gmail.com | `GBXB5KIP33UEWXS67ZGC6R7DJVGT5URDXQ3C3CKMCRYE5CVAKADBPJ43` | "The font size on the mobile view is a bit too small for me." |
+| U005 | Vikram Singh | vikramsingh33@gmail.com | `GDLYECYW23R4K7LLMCNK6ZG4BMA6ODESNTUHNK56E3DOW6723VJ2HX5J` | "Need a way to filter past transactions by date." |
+| U006 | Anjali Desai | anjalidesai88@gmail.com | `GBADPHSX7CUQ4LCGDQNIP4E46T3HI7LV2W2USUNB5NR5ICOEPNK36S6Q` | "The contrast on the submit button isn't great in dark mode." |
+| U007 | Rajesh Verma | rajeshverma12@gmail.com | `GB7TNFB6WPTQ76Z3K7XLZLRKAXV4NDAZHR3XRKAMMGY6HMT36JPFFQXJ` | "It would be helpful to have a tooltip explaining gas fees." |
+| U008 | Pooja Chatterjee | poojachatterjee56@gmail.com | `GASEBCEBESE4BOY7M2LNUECKXIL7YOWUQODSVYJPKNV2OV3X2Q5WGPEN` | "Sometimes the recipient address validation fails without a clear error." |
+| U009 | Karthik Iyer | karthikiyer29@gmail.com | `GDZRSRB4DOK3372HO2OKYVJKGTL5MYF5VUSO5CD5CJJNQVG35HMBQT6U` | "Can we have a feature to save frequent recipients?" |
+| U010 | Meera Reddy | meerareddy67@gmail.com | `GAK6UK2CPLXJIHSXIGQWR3C3NQ53SIJ3NSDUBHLCUHSZ4RDQXP4COFWN` | "The landing page is a bit slow to render initially." |
+| U011 | Sanjay Mukherjee | sanjaymukherjee94@gmail.com | `GBXRYWWDR7L5RUR2DJFFGPWZ34ENAMAP5XLGWEQOUES2J6VAOGTHOHU3` | "I wish there was an option to export my transfer history." |
+| U012 | Divya Das | divyadas22@gmail.com | `GAVSIANHYBDPCI4ZF5CWDFLVINXC74PRKEY26JRZ43JC2V2MKIFQCTGU` | "The dashboard feels cluttered with too many cards." |
+
 ### Feedback Implementation Log
-Based directly on the feedback provided by our beta users, we are continuously iterating on the product:
 
 | User ID | Name | Email | Wallet Address | Feedback Summary | Improvement Made | Git Commit ID |
 |---------|------|-------|----------------|------------------|------------------|---------------|
