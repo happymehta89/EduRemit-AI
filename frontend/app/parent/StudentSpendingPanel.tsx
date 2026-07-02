@@ -148,7 +148,7 @@ export function StudentSpendingPanel({ student }: { student: StudentSummary }) {
               </div>
               <div>
                 <p className="text-xs text-sand">Remaining (est.)</p>
-                <p className="font-display text-lg text-ink tabular">{formatXLM(summary.remainingBalance)}</p>
+                <p title="Network fees deducted automatically" className="font-display text-lg text-ink tabular">{formatXLM(summary.remainingBalance)}</p>
               </div>
             </div>
             {chartData.length > 0 ? (
