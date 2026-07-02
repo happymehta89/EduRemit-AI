@@ -8,7 +8,7 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
           <span className="font-display italic text-xl text-ink">EduRemit</span>
           <nav className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-ink-soft hover:text-ink transition-colors">
+            <Link href="/login" className="text-base sm:text-sm text-ink-soft hover:text-ink transition-colors">
               Log in
             </Link>
             <Link
