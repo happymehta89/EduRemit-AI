@@ -89,7 +89,7 @@ export function StudentSpendingPanel({ student }: { student: StudentSummary }) {
     <div className="grid sm:grid-cols-2 gap-6">
       {/* Send funds */}
       <div>
-        <p className="text-xs uppercase tracking-wider text-sand mb-3">Send funds</p>
+        <p className="text-xs uppercase tracking-wider text-sand mb-3" title="Stellar network fees are ~0.00001 XLM">Send Education Funds Securely</p>
         {error && (
           <div className="mb-3">
             <ErrorBanner message={error} />
