@@ -33,7 +33,7 @@ export function StudentSpendingPanel({ student }: { student: StudentSummary }) {
     setLastHash(null);
     const numericAmount = Number(amount);
     if (!numericAmount || numericAmount <= 0) {
-      setError("Enter an amount greater than zero.");
+      setError("Enter an amount greater than zero. Invalid Stellar addresses will also be rejected.");
       return;
     }
     setSubmitting(true);
