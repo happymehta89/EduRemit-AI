@@ -30,7 +30,7 @@ EduRemit AI is a decentralized, transparent, and low-cost education remittance a
 To simulate early-stage startup growth, we actively collected feedback from **50+ testnet users** via a structured [Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdRHaovGvUAy5ec9vy09iUpqh9XQxtCVHHRdYchzmhOFec91g/viewform). 
 
 🔗 **[View Exported Google Form Responses (Google Sheets)](https://docs.google.com/spreadsheets/d/1kjV_u7TEhQfy4kiZN8_eRANmh6UQz_RVwQWyStz8IOo/edit?usp=sharing)**
-> **Note to Reviewers:** The feedback data is available via the public Google Sheets link above, containing verifiable Stellar wallet addresses and transaction hashes.
+
 
 ### Feedback Implementation Log
 Based directly on the feedback provided by our beta users, we are continuously iterating on the product:
@@ -153,20 +153,14 @@ eduremit-ai/
 
 Below are screenshots demonstrating the product user interface, dashboard tracking, mobile responsive design, and AI budget analysis:
 
-### 1. Parent Experience
+### Dashboards
 ![Parent Dashboard](./images/parent_dashboard.png)
-![Parent Transaction History](./images/parents_history.png)
-![Parent Feedback](./images/parent_feedback.png)
-
-### 2. Student Experience
 ![Student Dashboard](./images/student_dashboard.png)
-![Student Overview](./images/student_overview.png)
-![AI Budget Advisor](./images/AI_advisor.png)
-![Student Transaction History](./images/student_history.png)
-
-### 3. University Experience
 ![University Dashboard](./images/university_dashboard.png)
-![University Transaction History](./images/university_history.png)
+
+### Analytics & Responsive Design
+![Analytics](./images/analytics.png)
+![Responsive UI](./images/responsive%20ui.png)
 
 ---
 
