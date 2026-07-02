@@ -55,7 +55,7 @@ export function TransactionHistory() {
     <Card className="mt-8">
       <CardBody className="pt-5">
         <div className="flex items-center justify-between mb-4">
-          <p className="font-display text-xl text-ink">Payment History</p>
+          <div className="flex items-center gap-2"><p className="font-display text-xl text-ink">Payment History</p><input type="date" className="text-xs border border-hairline rounded px-2 py-1 bg-transparent text-ink ml-2" /></div>
           {transactions.length > 0 && (
             <Button variant="ghost" size="sm" onClick={downloadCSV} className="flex items-center gap-2">
               <Download size={14} />
