@@ -38,7 +38,7 @@ export default function ParentDashboard() {
         description="Fund a linked student directly, and keep an eye on how it's being spent — every transfer settles on the Stellar testnet."
       />
 
-      <div className="grid sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         <Card>
           <CardBody className="pt-5">
             <p className="text-xs uppercase tracking-wider text-sand mb-1">Your wallet balance</p>
