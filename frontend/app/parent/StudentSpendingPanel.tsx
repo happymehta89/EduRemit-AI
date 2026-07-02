@@ -124,6 +124,7 @@ export function StudentSpendingPanel({ student }: { student: StudentSummary }) {
           </Field>
           <Field label="Memo">
             <Input value={memo} onChange={(e) => setMemo(e.target.value)} maxLength={28} />
+            <label className="text-xs text-sand flex items-center gap-2 mt-2"><input type="checkbox" /> Save recipient to address book</label>
           </Field>
           <Button type="submit" disabled={submitting} className="self-start">
             <Send size={14} />
