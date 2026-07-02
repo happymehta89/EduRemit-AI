@@ -59,7 +59,7 @@ export function TransactionHistory() {
           {transactions.length > 0 && (
             <Button variant="ghost" size="sm" onClick={downloadCSV} className="flex items-center gap-2">
               <Download size={14} />
-              Export CSV
+              Export CSV History
             </Button>
           )}
         </div>
