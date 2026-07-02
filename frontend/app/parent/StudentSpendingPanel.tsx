@@ -120,6 +120,7 @@ export function StudentSpendingPanel({ student }: { student: StudentSummary }) {
               onChange={(e) => setAmount(e.target.value)}
               placeholder="500"
             />
+            <p className="text-xs text-sand mt-1">Live Exchange Rate: 1 XLM = $0.10 USD</p>
           </Field>
           <Field label="Memo">
             <Input value={memo} onChange={(e) => setMemo(e.target.value)} maxLength={28} />
