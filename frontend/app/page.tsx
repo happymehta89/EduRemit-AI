@@ -13,7 +13,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/signup"
-              className="text-sm bg-ledger text-paper px-4 py-2 rounded hover:bg-ledger-dark transition-colors"
+              className="text-sm bg-ledger text-paper px-4 py-2 rounded hover:bg-ledger-dark dark:hover:bg-gray-800 transition-colors"
             >
               Get started
             </Link>
